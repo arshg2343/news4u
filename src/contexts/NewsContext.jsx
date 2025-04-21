@@ -41,8 +41,9 @@ export const NewsProvider = ({ children }) => {
 		setError(null);
 
 		try {
+			// Use current page or reset to 1
 			const currentPage = reset ? 1 : page;
-			let url = `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&apikey=${apikey}&page=${currentPage}`;
+			let url = `https://gnews.io/api/v4/top-headlines?category=${category}&apikey=${apikey}&page=${currentPage}`;
 
 			if (selectedSources.length > 0) {
 				url += `&sources=${selectedSources.join(",")}`;
@@ -59,20 +60,30 @@ export const NewsProvider = ({ children }) => {
 					urlToImage: article.image || "/placeholder.svg",
 					publishedAt: article.publishedAt,
 					source: { name: article.source?.name || "Unknown" },
+					// Add a unique ID to help with React rendering
+					id: article.url + "-" + article.publishedAt,
 				}));
+
+				// Check if we received fewer articles than expected (usually 10)
+				const isLastPage = formattedArticles.length < 10;
 
 				if (reset) {
 					setArticles(formattedArticles);
+					setPage(2); // Reset to page 2 for next fetch
 				} else {
 					setArticles((prev) => [...prev, ...formattedArticles]);
+					setPage(currentPage + 1); // Increment page for next fetch
 				}
-				setHasMore(formattedArticles.length > 0);
-				setPage(currentPage + 1);
+
+				// Only have more if we got a full page of results
+				setHasMore(!isLastPage && formattedArticles.length > 0);
 			} else {
 				setError(data.message || "Failed to fetch news");
+				setHasMore(false);
 			}
 		} catch (err) {
 			setError(err.message);
+			setHasMore(false);
 		} finally {
 			setLoading(false);
 		}
@@ -80,11 +91,10 @@ export const NewsProvider = ({ children }) => {
 
 	// Reset on preference change
 	useEffect(() => {
-		setPage(1);
+		// When category or sources change, reset and fetch from page 1
 		fetchArticles(true);
 	}, [category, selectedSources]);
 
-	// Other functions remain the same
 	const changeCategory = (newCategory) => setCategory(newCategory);
 
 	const toggleSource = (sourceId) => {
@@ -96,12 +106,18 @@ export const NewsProvider = ({ children }) => {
 	};
 
 	const saveArticle = (article) => {
-		const saved = JSON.parse(localStorage.getItem("savedArticles") || "[]");
-		if (!saved.some((a) => a.url === article.url)) {
-			localStorage.setItem(
-				"savedArticles",
-				JSON.stringify([...saved, article])
+		try {
+			const saved = JSON.parse(
+				localStorage.getItem("savedArticles") || "[]"
 			);
+			if (!saved.some((a) => a.url === article.url)) {
+				localStorage.setItem(
+					"savedArticles",
+					JSON.stringify([...saved, article])
+				);
+			}
+		} catch (error) {
+			console.error("Error saving article:", error);
 		}
 	};
 
