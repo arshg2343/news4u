@@ -16,47 +16,24 @@ export const NewsProvider = ({ children }) => {
 	const [sources, setSources] = useState([]);
 	const [selectedSources, setSelectedSources] = useState([]);
 
-	const apikey = import.meta.env.VITE_NEWS_API_KEY;
-	console.log(apikey);
+	// Get API key from environment variables
+	const apikey = import.meta.env.VITE_NEWS_API_KEY || "your_api_key_here";
 
-	// Load user preferences from localStorage
+	// Load user preferences
 	useEffect(() => {
 		const savedCategory = localStorage.getItem("newsCategory");
 		const savedSources = localStorage.getItem("newsSources");
-
 		if (savedCategory) setCategory(savedCategory);
 		if (savedSources) setSelectedSources(JSON.parse(savedSources));
 	}, []);
 
-	// Save preferences to localStorage when they change
+	// Save preferences
 	useEffect(() => {
 		localStorage.setItem("newsCategory", category);
 		localStorage.setItem("newsSources", JSON.stringify(selectedSources));
 	}, [category, selectedSources]);
 
-	// Fetch available sources
-	useEffect(() => {
-		const fetchSources = async () => {
-			try {
-				const response = await fetch(
-					`https://newsapi.org/v2/sources?apiKey=${apikey}`
-				);
-				const data = await response.json();
-
-				if (data.status === "ok") {
-					setSources(data.sources);
-				} else {
-					setError("Failed to fetch sources");
-				}
-			} catch (err) {
-				setError("Error fetching sources: " + err.message);
-			}
-		};
-
-		fetchSources();
-	}, []);
-
-	// Fetch articles based on current preferences
+	// Fetch articles
 	const fetchArticles = async (reset = false) => {
 		if (loading) return;
 
@@ -65,78 +42,71 @@ export const NewsProvider = ({ children }) => {
 
 		try {
 			const currentPage = reset ? 1 : page;
-			let url = `https://newsapi.org/v2/top-headlines?page=${currentPage}&pageSize=10&category=${category}&apiKey=${apikey}`;
+			let url = `https://gnews.io/api/v4/top-headlines?category=${category}&apikey=${apikey}&page=${currentPage}`;
 
 			if (selectedSources.length > 0) {
-				url = `https://newsapi.org/v2/top-headlines?page=${currentPage}&pageSize=10&sources=${selectedSources.join(
-					","
-				)}&apiKey=${apikey}`;
+				url += `&sources=${selectedSources.join(",")}`;
 			}
 
 			const response = await fetch(url);
 			const data = await response.json();
 
-			if (data.status === "ok") {
-				if (reset) {
-					setArticles(data.articles);
-				} else {
-					setArticles((prevArticles) => [
-						...prevArticles,
-						...data.articles,
-					]);
-				}
+			if (data.articles) {
+				const formattedArticles = data.articles.map((article) => ({
+					title: article.title,
+					description: article.description,
+					url: article.url,
+					urlToImage: article.image || "/placeholder.svg",
+					publishedAt: article.publishedAt,
+					source: { name: article.source?.name || "Unknown" },
+				}));
 
-				setHasMore(data.articles.length > 0);
+				if (reset) {
+					setArticles(formattedArticles);
+				} else {
+					setArticles((prev) => [...prev, ...formattedArticles]);
+				}
+				setHasMore(formattedArticles.length > 0);
 				setPage(currentPage + 1);
 			} else {
-				setError("Failed to fetch news");
+				setError(data.message || "Failed to fetch news");
 			}
 		} catch (err) {
-			setError("Error fetching news: " + err.message);
+			setError(err.message);
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	// Reset and fetch when preferences change
+	// Reset on preference change
 	useEffect(() => {
 		setPage(1);
 		fetchArticles(true);
 	}, [category, selectedSources]);
 
-	const changeCategory = (newCategory) => {
-		setCategory(newCategory);
-	};
+	// Other functions remain the same
+	const changeCategory = (newCategory) => setCategory(newCategory);
 
 	const toggleSource = (sourceId) => {
-		setSelectedSources((prev) => {
-			if (prev.includes(sourceId)) {
-				return prev.filter((id) => id !== sourceId);
-			} else {
-				return [...prev, sourceId];
-			}
-		});
+		setSelectedSources((prev) =>
+			prev.includes(sourceId)
+				? prev.filter((id) => id !== sourceId)
+				: [...prev, sourceId]
+		);
 	};
 
 	const saveArticle = (article) => {
-		const savedArticles = JSON.parse(
-			localStorage.getItem("savedArticles") || "[]"
-		);
-		const isAlreadySaved = savedArticles.some(
-			(saved) => saved.url === article.url
-		);
-
-		if (!isAlreadySaved) {
+		const saved = JSON.parse(localStorage.getItem("savedArticles") || []);
+		if (!saved.some((a) => a.url === article.url)) {
 			localStorage.setItem(
 				"savedArticles",
-				JSON.stringify([...savedArticles, article])
+				JSON.stringify([...saved, article])
 			);
 		}
 	};
 
-	const getSavedArticles = () => {
-		return JSON.parse(localStorage.getItem("savedArticles") || "[]");
-	};
+	const getSavedArticles = () =>
+		JSON.parse(localStorage.getItem("savedArticles") || []);
 
 	return (
 		<NewsContext.Provider
