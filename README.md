@@ -2,22 +2,20 @@
 
 > A modern news aggregation web application built with React and Vite
 
-![News4U Logo Placeholder](./src/assets/logo.png)
-
 News4U is a responsive news browsing application that aggregates articles from various sources using the NewsAPI.org service. This project demonstrates proficiency in React development, featuring category filtering, infinite scroll, and personalized article saving functionality.
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
-- [Project Context](#project-context)
+-   [Overview](#overview)
+-   [Features](#features)
+-   [Technologies Used](#technologies-used)
+-   [Installation](#installation)
+-   [Configuration](#configuration)
+-   [Usage](#usage)
+-   [Project Structure](#project-structure)
+-   [Contributing](#contributing)
+-   [License](#license)
+-   [Project Context](#project-context)
 
 ## Overview
 
@@ -27,26 +25,24 @@ The project demonstrates integration with external APIs, implementation of compl
 
 ## Features
 
-- 📰 **Article Browsing**: View the latest news from various sources
-- 🔍 **Category Filtering**: Filter articles by category (General, Business, Technology, etc.)
-- 🏢 **Source Selection**: Filter by specific news sources with multi-select capability
-- ♾️ **Infinite Scroll**: Load more articles as you scroll for seamless browsing
-- 💾 **Save Articles**: Save your favorite articles for later reading
-- 🌓 **Theme Toggle**: Switch between dark and light modes with system preference detection
-- 📱 **Responsive Design**: Optimal viewing experience across all device sizes
-- ⚡ **Fast Performance**: Built with Vite for optimal loading and rendering speed
-
-![News4U Dashboard Placeholder](./screenshots/dashboard.png)
+-   📰 **Article Browsing**: View the latest news from various sources
+-   🔍 **Category Filtering**: Filter articles by category (General, Business, Technology, etc.)
+-   🏢 **Source Selection**: Filter by specific news sources with multi-select capability
+-   ♾️ **Infinite Scroll**: Load more articles as you scroll for seamless browsing
+-   💾 **Save Articles**: Save your favorite articles for later reading
+-   🌓 **Theme Toggle**: Switch between dark and light modes with system preference detection
+-   📱 **Responsive Design**: Optimal viewing experience across all device sizes
+-   ⚡ **Fast Performance**: Built with Vite for optimal loading and rendering speed
 
 ## Technologies Used
 
-- ⚛️ **React.js**: Front-end library for building user interfaces
-- ⚡ **Vite**: Next-generation frontend tooling for faster development
-- 🎨 **Tailwind CSS**: Utility-first CSS framework for styling
-- 🧠 **Context API**: For efficient state management
-- 📅 **date-fns**: Modern JavaScript date utility library
-- 🔌 **NewsAPI.org**: External API for retrieving news data
-- 💾 **localStorage**: For persisting user preferences and saved articles
+-   ⚛️ **React.js**: Front-end library for building user interfaces
+-   ⚡ **Vite**: Next-generation frontend tooling for faster development
+-   🎨 **Tailwind CSS**: Utility-first CSS framework for styling
+-   🧠 **Context API**: For efficient state management
+-   📅 **date-fns**: Modern JavaScript date utility library
+-   🔌 **NewsAPI.org**: External API for retrieving news data
+-   💾 **localStorage**: For persisting user preferences and saved articles
 
 ## Installation
 
@@ -92,13 +88,9 @@ VITE_NEWS_API_KEY=a1b2c3d4e5f6g7h8i9j0
 
 The main dashboard displays news articles in a responsive grid. Use the category tabs at the top to filter by news category:
 
-![Category Filter Placeholder](./screenshots/category-filter.png)
-
 ### Source Filtering
 
 Click on the "Sources" dropdown to select specific news sources:
-
-![Source Filter Placeholder](./screenshots/source-filter.png)
 
 ### Saving Articles
 
@@ -139,19 +131,3 @@ news4u/
 ├── vite.config.js
 └── README.md
 ```
-
-## Contributing
-
-This project was created as a college assignment and is not actively maintained. However, if you'd like to suggest improvements or report issues, feel free to open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Project Context
-
-This application was developed as a project submission for the Advanced React Development course at [Your College Name]. The project demonstrates practical implementation of React concepts and best practices learned throughout the course.
-
----
-
-Created by [Your Name] © 2025
