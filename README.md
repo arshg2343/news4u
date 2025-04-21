@@ -2,8 +2,6 @@
 
 > A modern news aggregation web application built with React and Vite
 
-![News4U Logo Placeholder](./src/assets/logo.png)
-
 News4U is a responsive news browsing application that aggregates articles from various sources using the NewsAPI.org service. This project demonstrates proficiency in React development, featuring category filtering, infinite scroll, and personalized article saving functionality.
 
 ## Table of Contents
@@ -36,7 +34,6 @@ The project demonstrates integration with external APIs, implementation of compl
 - 📱 **Responsive Design**: Optimal viewing experience across all device sizes
 - ⚡ **Fast Performance**: Built with Vite for optimal loading and rendering speed
 
-![News4U Dashboard Placeholder](./screenshots/dashboard.png)
 
 ## Technologies Used
 
@@ -72,7 +69,7 @@ The application will be available at `http://localhost:5173` by default.
 
 ### API Key Setup
 
-1. Register for an API key at [NewsAPI.org](https://newsapi.org)
+1. Register for an API key at [Gnews.io](https://gnews.io)
 2. Create a `.env` file in the root directory
 3. Add your API key as follows:
 
@@ -92,13 +89,9 @@ VITE_NEWS_API_KEY=a1b2c3d4e5f6g7h8i9j0
 
 The main dashboard displays news articles in a responsive grid. Use the category tabs at the top to filter by news category:
 
-![Category Filter Placeholder](./screenshots/category-filter.png)
-
 ### Source Filtering
 
 Click on the "Sources" dropdown to select specific news sources:
-
-![Source Filter Placeholder](./screenshots/source-filter.png)
 
 ### Saving Articles
 
