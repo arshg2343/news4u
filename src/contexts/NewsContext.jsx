@@ -16,7 +16,7 @@ export const NewsProvider = ({ children }) => {
 	const [sources, setSources] = useState([]);
 	const [selectedSources, setSelectedSources] = useState([]);
 
-	const apiKey = import.meta.env.VITE_API_KEY;
+	const apikey = import.meta.env.VITE_API_KEY;
 	// Load user preferences from localStorage
 	useEffect(() => {
 		const savedCategory = localStorage.getItem("newsCategory");
