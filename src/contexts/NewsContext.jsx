@@ -42,7 +42,7 @@ export const NewsProvider = ({ children }) => {
 
 		try {
 			const currentPage = reset ? 1 : page;
-			let url = `https://gnews.io/api/v4/top-headlines?category=${category}&apikey=${apikey}&page=${currentPage}`;
+			let url = `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&apikey=${apikey}&page=${currentPage}`;
 
 			if (selectedSources.length > 0) {
 				url += `&sources=${selectedSources.join(",")}`;
@@ -96,7 +96,7 @@ export const NewsProvider = ({ children }) => {
 	};
 
 	const saveArticle = (article) => {
-		const saved = JSON.parse(localStorage.getItem("savedArticles") || []);
+		const saved = JSON.parse(localStorage.getItem("savedArticles") || "[]");
 		if (!saved.some((a) => a.url === article.url)) {
 			localStorage.setItem(
 				"savedArticles",
@@ -105,8 +105,15 @@ export const NewsProvider = ({ children }) => {
 		}
 	};
 
-	const getSavedArticles = () =>
-		JSON.parse(localStorage.getItem("savedArticles") || []);
+	const getSavedArticles = () => {
+		try {
+			const saved = localStorage.getItem("savedArticles");
+			return saved ? JSON.parse(saved) : [];
+		} catch (error) {
+			console.error("Error parsing saved articles:", error);
+			return [];
+		}
+	};
 
 	return (
 		<NewsContext.Provider
